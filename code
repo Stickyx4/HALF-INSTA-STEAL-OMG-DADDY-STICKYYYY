@@ -1,0 +1,257 @@
+--// =========================
+--// WHITELIST SYSTEM
+--// =========================
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- 🔒 WHITELIST (USE USERIDS)
+local Whitelist = {
+    [9282679972] = true, -- <-- YOUR USERID
+    [8913201471] = true, -- <-- FRIEND USERID
+    [1186495185] = true,
+}
+
+if not Whitelist[player.UserId] then
+    player:Kick("You are not whitelisted to use this script maybe try buying it kid😭.")
+    return
+end
+
+--// LOAD PROTECTION
+if _G.NovaJ6Loaded then return end
+_G.NovaJ6Loaded = true
+
+--// =========================
+--// SERVICES
+--// =========================
+
+local Lighting = game:GetService("Lighting")
+local ProximityPromptService = game:GetService("ProximityPromptService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+
+--// =========================
+--// COORDINATES
+--// =========================
+
+local tpPos = CFrame.new(-352.992, -6.763, 75.827)
+local infoPos = CFrame.new(-334.661, -6.799, 102.386)
+local tpEnabled = true
+
+--// =========================
+--// WORLD MARKER
+--// =========================
+
+local function CreateMarker()
+    local p = workspace:FindFirstChild("Nova_TakePoint") or Instance.new("Part", workspace)
+    p.Name = "Nova_TakePoint"
+    p.Size = Vector3.new(4, 0.2, 4)
+    p.CFrame = infoPos * CFrame.new(0, -3.2, 0)
+    p.Anchored = true
+    p.CanCollide = false
+    p.Material = Enum.Material.Neon
+    p.Color = Color3.fromRGB(0, 255, 0)
+
+    local bg = p:FindFirstChild("Label") or Instance.new("BillboardGui", p)
+    bg.AlwaysOnTop = true
+    bg.Size = UDim2.new(0, 200, 0, 50)
+    bg.ExtentsOffset = Vector3.new(0, 3, 0)
+
+    local tl = bg:FindFirstChild("Text") or Instance.new("TextLabel", bg)
+    tl.BackgroundTransparency = 1
+    tl.Size = UDim2.new(1, 0, 1, 0)
+    tl.Font = Enum.Font.GothamBold
+    tl.TextSize = 18
+    tl.TextColor3 = Color3.new(1, 1, 1)
+
+    return p, tl
+end
+
+local box, boxLabel = CreateMarker()
+
+--// =========================
+--// GUI
+--// =========================
+
+local ScreenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+ScreenGui.Name = "NovaJ6_Restored"
+ScreenGui.ResetOnSpawn = false
+
+local frame = Instance.new("Frame", ScreenGui)
+frame.Size = UDim2.fromOffset(265, 320)
+frame.Position = UDim2.fromScale(0.5, 0.5)
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.BackgroundColor3 = Color3.fromRGB(2, 2, 10)
+frame.ClipsDescendants = true
+frame.Active = true
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 10)
+
+local UIStroke = Instance.new("UIStroke", frame)
+UIStroke.Thickness = 2
+UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+--// TOP BAR
+local topBar = Instance.new("Frame", frame)
+topBar.Size = UDim2.new(1, 0, 0, 45)
+topBar.BackgroundTransparency = 1
+topBar.Active = true
+
+local title = Instance.new("TextLabel", topBar)
+title.Size = UDim2.new(1, -10, 1, 0)
+title.Position = UDim2.fromOffset(5, 0)
+title.Text = "Sticky X Insta Steal💢"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 24
+title.TextColor3 = Color3.new(1, 1, 1)
+title.BackgroundTransparency = 1
+title.TextXAlignment = Enum.TextXAlignment.Left
+
+--// =========================
+--// BACKGROUND EFFECTS
+--// =========================
+
+local starContainer = Instance.new("Frame", frame)
+starContainer.Size = UDim2.fromScale(1, 1)
+starContainer.BackgroundTransparency = 1
+
+local function spawnSpaceObject(text, size)
+    local label = Instance.new("TextLabel", starContainer)
+    label.BackgroundTransparency = 1
+    label.TextTransparency = 1
+    label.Text = text
+    label.TextSize = size
+    label.AnchorPoint = Vector2.new(0.5, 0.5)
+    label.Position = UDim2.fromScale(math.random(5,95)/100, math.random(5,95)/100)
+
+    task.spawn(function()
+        while label.Parent do
+            task.wait(math.random(1, 6))
+            label.Position = UDim2.fromScale(math.random(5,95)/100, math.random(5,95)/100)
+            TweenService:Create(label, TweenInfo.new(1.5), {TextTransparency = 0.2}):Play()
+            task.wait(math.random(3, 6))
+            TweenService:Create(label, TweenInfo.new(1.5), {TextTransparency = 1}):Play()
+        end
+    end)
+end
+
+for i = 1, 80 do spawnSpaceObject(".", math.random(8,14)) end
+for i = 1, 5 do spawnSpaceObject((math.random(1,2)==1 and "🌑" or "☄️"), 25) end
+for i = 1, 4 do spawnSpaceObject("✨", 26) end
+for i = 1, 4 do spawnSpaceObject("🚀", 26) end
+for i = 1, 4 do spawnSpaceObject("⭐️", 26) end
+
+--// =========================
+--// UI CONTENT
+--// =========================
+
+local insBox = Instance.new("TextLabel", frame)
+insBox.Size = UDim2.new(1, -20, 0, 110)
+insBox.Position = UDim2.fromOffset(10, 50)
+insBox.BackgroundTransparency = 0.88
+insBox.BackgroundColor3 = Color3.new(0,0,0)
+insBox.Text = "1. Need desync❗️\n2. Need carpet❗️\n3. Find victim😈\n4. Happy Stealing!!"
+insBox.TextColor3 = Color3.fromRGB(200, 200, 255)
+insBox.Font = Enum.Font.GothamMedium
+insBox.TextSize = 11
+insBox.TextWrapped = true
+insBox.TextXAlignment = Enum.TextXAlignment.Left
+Instance.new("UICorner", insBox).CornerRadius = UDim.new(0, 6)
+Instance.new("UIPadding", insBox).PaddingLeft = UDim.new(0, 12)
+
+local function makeButton(text, y, color)
+    local b = Instance.new("TextButton", frame)
+    b.Size = UDim2.new(1, -30, 0, 40)
+    b.Position = UDim2.fromOffset(15, y)
+    b.BackgroundColor3 = color
+    b.TextSize = 14
+    b.Text = text
+    b.Font = Enum.Font.GothamBold
+    b.TextColor3 = Color3.new(1, 1, 1)
+    Instance.new("UICorner", b).CornerRadius = UDim.new(0, 8)
+    return b
+end
+
+local ToggleBtn = makeButton("TP: ON✅", 195, Color3.fromRGB(45, 90, 45))
+local KickBtn = makeButton("KICK SELF💢", 245, Color3.fromRGB(120, 40, 40))
+
+ToggleBtn.MouseButton1Click:Connect(function()
+    tpEnabled = not tpEnabled
+    ToggleBtn.Text = tpEnabled and "TP: ON✅" or "TP: OFF❌"
+    ToggleBtn.BackgroundColor3 = tpEnabled and Color3.fromRGB(45, 90, 45) or Color3.fromRGB(90, 45, 45)
+end)
+
+KickBtn.MouseButton1Click:Connect(function()
+    player:Kick("You stole a good ahh brainrot😭")
+end)
+
+--// =========================
+--// TP LOGIC
+--// =========================
+
+local function RunTP()
+    if not tpEnabled or not player.Character then return end
+    local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        local tool = player.Backpack:FindFirstChild("Flying Carpet") or player.Character:FindFirstChild("Flying Carpet")
+        if tool then player.Character.Humanoid:EquipTool(tool) end
+        hrp.AssemblyLinearVelocity = Vector3.zero
+        player.Character:PivotTo(tpPos)
+        task.wait(0.25)
+    end
+end
+
+ProximityPromptService.PromptTriggered:Connect(function(p, tr)
+    if tr == player and (player.Character.HumanoidRootPart.Position - infoPos.Position).Magnitude < 8 then
+        RunTP()
+    end
+end)
+
+RunService.Heartbeat:Connect(function()
+    UIStroke.Color = Color3.fromHSV((tick() * 0.1) % 1, 0.7, 1)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local ready = (player.Character.HumanoidRootPart.Position - infoPos.Position).Magnitude < 7
+        box.Color = ready and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,0,0)
+        boxLabel.Text = ready and "READY TO STEAL❓" or "❗️STAND HERE❗️"
+        boxLabel.TextColor3 = box.Color
+    end
+end)
+
+--// =========================
+--// DRAG SYSTEM
+--// =========================
+
+local dragging, dragStart, startPos = false
+
+local function update(input)
+    local delta = input.Position - dragStart
+    frame.Position = UDim2.new(
+        startPos.X.Scale,
+        startPos.X.Offset + delta.X,
+        startPos.Y.Scale,
+        startPos.Y.Offset + delta.Y
+    )
+end
+
+topBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (
+        input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch
+    ) then
+        update(input)
+    end
+end)
